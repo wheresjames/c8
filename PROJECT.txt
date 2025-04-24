@@ -1,0 +1,8 @@
+name            c8
+version         0.1.0
+description     Module wrapper for v8 engine
+company         wheresjames
+author          Robert Umbehant
+email           libc8@wheresjames.com
+url             https://github.com/wheresjames/libc8
+license         MIT
