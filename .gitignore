@@ -4,3 +4,4 @@ build
 lib3
 Package.resolved
 .DS_Store
+crash.log

@@ -17,12 +17,8 @@ endif()
 include(${CMAKE_SOURCE_DIR}/cmake/debug.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/readProjectConfig.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/getTargetBuildPath.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/getLatestGitTag.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/getLatestStableGitTag.cmake)
-
-# Show compiler info
-message(STATUS " [-] CMAKE_C_COMPILER=${CMAKE_C_COMPILER}")
-message(STATUS " [-] CMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}")
-message(STATUS " [-] CMAKE_LINKER=${CMAKE_LINKER}")
 
 
 #-------------------------------------------------------------
@@ -44,21 +40,30 @@ add_compile_options(-DAPPBUILD="${APPBUILD}")
 add_compile_options(-DAPPDESCRIPTION="${APPDESCRIPTION}")
 add_compile_options(-DAPPURL="${APPURL}")
 
+# Show compiler info
+message(STATUS " [-] CMAKE_C_COMPILER=${CMAKE_C_COMPILER}")
+message(STATUS " [-] CMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}")
+message(STATUS " [-] CMAKE_LINKER=${CMAKE_LINKER}")
 
 #-------------------------------------------------------------
-# Versions
+# 3rd party libs
+
+get_target_build_path(LIB3_BUILD_NAME)
+set(LIB3_BUILD_DIR "${CMAKE_SOURCE_DIR}/lib3/${LIB3_BUILD_NAME}")
 
 #set(LIB3_V8_VERSION "13.6.236")
 get_latest_stable_git_tag("https://github.com/v8/v8.git" LIB3_V8_VERSION)
 
+get_latest_git_tag("https://github.com/boostorg/boost.git" "^boost-?[0-9]+(\.[0-9]+){0,2}$" LIB3_BOOST_VERSION)
+set(BOOST_ENABLE_CMAKE ON CACHE BOOL "" FORCE)
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+set(BOOST_INCLUDE_LIBRARIES "core;assert;stacktrace" CACHE STRING "" FORCE)
+
+get_latest_git_tag("https://github.com/bombela/backward-cpp.git" "^v" LIB3_BACKWARD_VERSION)
+
+get_latest_git_tag("https://github.com/jarro2783/cxxopts.git" "^v" LIB3_CXXOPTS_VERSION)
+
 dump_cmake_variables(LIB3)
-
-
-#-------------------------------------------------------------
-# 3rd party libs
-get_target_build_path(LIB3_BUILD_NAME)
-set(LIB3_BUILD_DIR "${CMAKE_SOURCE_DIR}/lib3/${LIB3_BUILD_NAME}")
-message(STATUS "\n-- LIB3_BUILD_DIR=${LIB3_BUILD_DIR}")
 
 
 #-------------------------------------------------------------
