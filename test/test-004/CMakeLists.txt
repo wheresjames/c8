@@ -25,12 +25,7 @@ target_include_directories(${BINARY} PUBLIC ${v8_INCLUDE_DIRS})
 target_link_directories(${BINARY} PUBLIC ${v8_BINARY_DIR})
 
 # Link libraries
-target_link_libraries(${BINARY} PRIVATE Boost::stacktrace_backtrace)
+target_link_libraries(${BINARY} PRIVATE c8)
 
 # Strip debug symbols into a separate file
-add_custom_command(TARGET ${BINARY} POST_BUILD
-    COMMENT "Stripping debug symbols for ${BINARY} into ${BINARY}.debug"
-    COMMAND ${CMAKE_OBJCOPY} --only-keep-debug ${BINARY} ${BINARY}.debug
-    COMMAND ${CMAKE_STRIP} --strip-unneeded ${BINARY}
-    COMMAND ${CMAKE_OBJCOPY} --add-gnu-debuglink=${BINARY}.debug ${BINARY}
-)
+strip_symbols_postbuild(${BINARY})

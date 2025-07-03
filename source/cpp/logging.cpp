@@ -1,24 +1,6 @@
 
-#include "c8/c8.hpp"
+#include "c8/c8-internal.h"
 
-//=============================================================================
-// Global variables
-static struct {
-
-    /// False if not initialized
-    bool                                                        bInit = false;
-
-    /// Log level
-    int                                                         nLogLevel = C8_LOGLEVEL(Warning);
-
-    /// Callback function for logging
-    c8_LogFunctionPtr                                           onLogMessage = 0;
-
-} c8_globals;
-
-
-//=============================================================================
-// Log functions
 
 std::string c8_ErrMsg(const std::string &sMsg, const char *file, const int line, const char *func)
 {
@@ -64,7 +46,7 @@ int c8_LogMsg(const int level, const char *msg, const char *file, const int line
         std::time_t now_time_t = std::chrono::system_clock::to_time_t(now);
         std::tm now_tm = *std::localtime(&now_time_t);
         std::stringstream ss;
-        ss << std::put_time(&now_tm, "[%H:%M:%S] ");
+        ss << sLevel << std::put_time(&now_tm, "[%H:%M:%S] ");
 
         std::string sDescription = ss.str() + c8_ErrMsg(msg, file, line, func);
 

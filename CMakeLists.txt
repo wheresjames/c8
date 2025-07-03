@@ -11,6 +11,8 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
+# Ensure debug symbols are included
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g")
 
 #-------------------------------------------------------------
 # Helper functions
@@ -19,6 +21,7 @@ include(${CMAKE_SOURCE_DIR}/cmake/readProjectConfig.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/getTargetBuildPath.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/getLatestGitTag.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/getLatestStableGitTag.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/stripSymbolsPostbuild.cmake)
 
 
 #-------------------------------------------------------------
@@ -44,6 +47,10 @@ add_compile_options(-DAPPURL="${APPURL}")
 message(STATUS " [-] CMAKE_C_COMPILER=${CMAKE_C_COMPILER}")
 message(STATUS " [-] CMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}")
 message(STATUS " [-] CMAKE_LINKER=${CMAKE_LINKER}")
+message(STATUS " [-] CMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}")
+message(STATUS " [-] CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
+message(STATUS " [-] CMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}")
+
 
 #-------------------------------------------------------------
 # 3rd party libs
