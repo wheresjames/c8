@@ -5,12 +5,20 @@
 #include <c8.h>
 #include <iostream>
 
+#if defined(C8_WINDOWS)
 int crashApp()
 {
-    int* p = nullptr;
-    *p = 42;
+    __debugbreak();
     return 0;
 }
+#else
+__attribute__((noinline))
+int crashApp()
+{
+    raise(SIGSEGV);
+    return 0;
+}
+#endif
 
 int main(int argc, char* argv[])
 {
