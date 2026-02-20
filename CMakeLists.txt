@@ -58,8 +58,9 @@ message(STATUS " [-] CMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}")
 get_target_build_path(LIB3_BUILD_NAME)
 set(LIB3_BUILD_DIR "${CMAKE_SOURCE_DIR}/lib3/${LIB3_BUILD_NAME}")
 
-#set(LIB3_V8_VERSION "13.6.236")
-get_latest_stable_git_tag("https://github.com/v8/v8.git" LIB3_V8_VERSION)
+# set(LIB3_V8_VERSION "14.7.79")
+# get_latest_stable_git_tag("https://github.com/v8/v8.git" "^[0-9]+(\.[0-9]+){0,2}-pgo$" LIB3_V8_VERSION)
+get_latest_git_tag("https://github.com/v8/v8.git" "^[0-9]+(\.[0-9]+){0,2}-pgo$" LIB3_V8_VERSION)
 
 get_latest_git_tag("https://github.com/boostorg/boost.git" "^boost-?[0-9]+(\.[0-9]+){0,2}$" LIB3_BOOST_VERSION)
 set(BOOST_ENABLE_CMAKE ON CACHE BOOL "" FORCE)
