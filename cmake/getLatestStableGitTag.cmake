@@ -1,5 +1,5 @@
 
-function(get_latest_stable_git_tag REPO_URL RESULT_VAR)
+function(get_latest_stable_git_tag REPO_URL TAG_PREFIX RESULT_VAR)
 
     # First see if the value is cached
     if (DEFINED ${RESULT_VAR})
@@ -8,7 +8,7 @@ function(get_latest_stable_git_tag REPO_URL RESULT_VAR)
     endif()
 
     execute_process(
-        COMMAND ${CMAKE_SOURCE_DIR}/sh/get-latest-stable-git-tag.sh ${REPO_URL}
+        COMMAND ${CMAKE_SOURCE_DIR}/sh/get-latest-stable-git-tag.sh ${REPO_URL} ${TAG_PREFIX}
         OUTPUT_VARIABLE result
         ERROR_QUIET
         OUTPUT_STRIP_TRAILING_WHITESPACE

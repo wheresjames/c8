@@ -3,13 +3,22 @@
 get_latest_stable_git_tag()
 {
     local GITURL=$1
+    local FILTER=${2:-".*"}  # Default: match all tags
 
-    # Get all tags, filter only x.y.z with patch < 10000 (filters out snapshot builds)
-    all_versions=$(git ls-remote --tags ${GITURL} | \
-        grep -o 'refs/tags/[0-9]\+\.[0-9]\+\.[0-9]\+$' | \
+    if [ -z "$GITURL" ]; then
+        return 1
+    fi
+
+    # Get filtered tags from remote
+    all_versions=$(git ls-remote --tags "$GITURL" | \
+        grep -o 'refs/tags/.*$' | \
         sed 's|refs/tags/||' | \
-        awk -F. '$3 < 10000' | \
-        sort -t. -k1,1n -k2,2n -k3,3n)
+        grep -v '\^{}' | \
+        grep -E "$FILTER")
+
+    if [ -z "$all_versions" ]; then
+        return 1
+    fi
 
     # Get unique sorted major.minor versions
     mapfile -t minors < <(echo "$all_versions" | cut -d. -f1,2 | sort -t. -k1,1n -k2,2n | uniq)
@@ -23,13 +32,14 @@ get_latest_stable_git_tag()
     target_minor="${minors[-2]}"
 
     # Now get the highest patch for that minor
-    latest=$(echo "$all_versions" | grep "^${target_minor}\." | tail -n1)
+    latest=$(echo "$all_versions" | grep "^${target_minor}\." | sort -t. -k1,1n -k2,2n -k3,3n | tail -n1)
 
     echo "$latest"
 }
 
 # If this script is called with a git URL
 GITURL=$1
+FILTER=$2
 if [ ! -z "${GITURL}" ]; then
-    echo $(get_latest_stable_git_tag ${GITURL})
+    echo $(get_latest_stable_git_tag ${GITURL} ${FILTER})
 fi

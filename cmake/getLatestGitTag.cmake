@@ -15,7 +15,6 @@ function(get_latest_git_tag REPO_URL TAG_PREFIX RESULT_VAR)
     )
     if (result)
         set(${RESULT_VAR} ${result} CACHE STRING "${RESULT_VAR} from ${REPO_URL}")
-
     else()
         message(FATAL_ERROR "Failed to get latest tag from ${REPO_URL}")
     endif()
