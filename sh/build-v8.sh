@@ -102,6 +102,16 @@ cd "${SOURCE_DIR}/v8"
 git checkout "${V8_VERSION}"
 gclient sync
 
+#===================================================================
+# Patch for GCC 15+ "avx10.2-512" error in highway
+Log "[+] Applying patch for highway/ops/set_macros-inl.h..."
+HWY_FILE=$(find . -name "set_macros-inl.h")
+if [ -f "$HWY_FILE" ]; then
+    Log "    Patching $HWY_FILE"
+    sed -i 's/avx10.2-512/avx10.2/g' "$HWY_FILE"
+else
+    Log "    Warning: set_macros-inl.h not found, skipping patch."
+fi
 
 #===================================================================
 cd "${SOURCE_DIR}/v8"
