@@ -15,13 +15,36 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install CMake
+      - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake build-essential
+          sudo apt-get install -y --no-install-recommends \
+                        cmake \
+                        build-essential \
+                        zip \
+                        git \
+                        ca-certificates \
+                        curl \
+                        python3 \
+                        ninja-build \
+                        pkg-config
 
       - name: Configure
         run: cmake -S . -B build
 
       - name: Build
         run: cmake --build build
+
+      - name: Install to staging
+        run: cmake --install build --prefix "${{ github.workspace }}/stage"
+
+      - name: Create ZIP artifact
+        run: |
+          cd stage
+          zip -r ../c8-linux-x86_64.zip .
+
+      - name: Upload artifact (ZIP)
+        uses: actions/upload-artifact@v4
+        with:
+          name: c8-linux-x86_64
+          path: c8-linux-x86_64.zip

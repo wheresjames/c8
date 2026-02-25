@@ -89,7 +89,7 @@ if [ -d "${BUILT_DIR}" ]; then
     exit 0
 fi
 
-exit -1
+# exit -1
 
 #===================================================================
 DEPOT_TOOLS_DIR="${SOURCE_DIR}/depot_tools"
@@ -203,6 +203,8 @@ if [ $? -ne 0 ]; then
     Log "Error: Failed to copy include files."
     exit 1
 fi
+
+mkdir -p "${BUILT_DIR}"
 
 cp -r "${INSTALL_DIR}/"* "${BUILT_DIR}/"
 
