@@ -68,7 +68,7 @@ if [ -z "$INSTALL_DIR" ]; then
     exit 1
 fi
 if [ -z "$V8_VERSION" ]; then
-    V8_VERSION="13.7.81"
+    V8_VERSION="14.5.202"
     Log "Warning: V8_VERSION not specified, using default version ${V8_VERSION}."
 fi
 
@@ -103,14 +103,16 @@ git checkout "${V8_VERSION}"
 gclient sync
 
 #===================================================================
-# Patch for GCC 15+ "avx10.2-512" error in highway
-Log "[+] Applying patch for highway/ops/set_macros-inl.h..."
-HWY_FILE=$(find . -name "set_macros-inl.h")
-if [ -f "$HWY_FILE" ]; then
-    Log "    Patching $HWY_FILE"
-    sed -i 's/avx10.2-512/avx10.2/g' "$HWY_FILE"
-else
-    Log "    Warning: set_macros-inl.h not found, skipping patch."
+# Patch for V8_VERSION is < 14.8.* "avx10.2-512" error in highway
+if [[ "$(printf '%s\n' "$V8_VERSION" "14.8.0" | sort -V | head -n1)" == "$V8_VERSION" && "$V8_VERSION" != "14.8.0" ]]; then
+    Log "[+] Applying patch for highway/ops/set_macros-inl.h..."
+    HWY_FILE=$(find . -name "set_macros-inl.h")
+    if [ -f "$HWY_FILE" ]; then
+        Log "    Patching $HWY_FILE"
+        sed -i 's/avx10.2-512/avx10.2/g' "$HWY_FILE"
+    else
+        Log "    Warning: set_macros-inl.h not found, skipping patch."
+    fi
 fi
 
 #===================================================================
@@ -137,6 +139,10 @@ is_clang = false
 use_custom_libcxx=false
 use_sysroot = true
 treat_warnings_as_errors = false
+v8_static_library = true
+enable_rust_cxx = true
+v8_enable_temporal_support = true
+rust_compiler_enabled = true
 EOF
 
 # Log "[+] Listing GN args..."

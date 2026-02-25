@@ -58,7 +58,7 @@ message(STATUS " [-] CMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}")
 get_target_build_path(LIB3_BUILD_NAME)
 set(LIB3_BUILD_DIR "${CMAKE_SOURCE_DIR}/lib3/${LIB3_BUILD_NAME}")
 
-# set(LIB3_V8_VERSION "14.7.79")
+# set(LIB3_V8_VERSION "14.5.202")
 get_latest_stable_git_tag("https://github.com/v8/v8.git" "^[0-9]+(\.[0-9]+){0,2}$" LIB3_V8_VERSION)
 # get_latest_git_tag("https://github.com/v8/v8.git" "^[0-9]+(\.[0-9]+){0,2}-pgo$" LIB3_V8_VERSION)
 
@@ -70,6 +70,8 @@ set(BOOST_INCLUDE_LIBRARIES "core;assert;stacktrace" CACHE STRING "" FORCE)
 get_latest_git_tag("https://github.com/bombela/backward-cpp.git" "^v" LIB3_BACKWARD_VERSION)
 
 get_latest_git_tag("https://github.com/jarro2783/cxxopts.git" "^v" LIB3_CXXOPTS_VERSION)
+
+get_latest_git_tag("https://github.com/boa-dev/temporal.git" "^v" LIB3_TEMPORAL_VERSION)
 
 dump_cmake_variables(LIB3)
 
