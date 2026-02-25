@@ -32,6 +32,8 @@ if [[ "$BUILD_TYPE" == "debug" ]]; then
     IS_DEBUG="true"
 fi
 
+BUILT_DIR="${SOURCE_DIR}/v8-install"
+
 #===================================================================
 # Dump parameters
 Log "BUILD_TYPE    : ${BUILD_TYPE}"
@@ -41,6 +43,7 @@ Log "SOURCE_DIR    : ${SOURCE_DIR}"
 Log "BUILD_DIR     : ${BUILD_DIR}"
 Log "INSTALL_DIR   : ${INSTALL_DIR}"
 Log "V8_VERSION    : ${V8_VERSION}"
+Log "BUILT_DIR     : ${BUILT_DIR}"
 
 #===================================================================
 if [[ ! "$BUILD_TYPE" =~ ^(release|rebug)$ ]]; then
@@ -72,6 +75,21 @@ if [ -z "$V8_VERSION" ]; then
     Log "Warning: V8_VERSION not specified, using default version ${V8_VERSION}."
 fi
 
+# Is it already installed
+if [ -d "${INSTALL_DIR}" ]; then
+    Log "[✓] Build and install exists: ${INSTALL_DIR}"
+    exit 0
+fi
+
+# Is there already a built version
+if [ -d "${BUILT_DIR}" ]; then
+    mkdir -p "${INSTALL_DIR}"
+    cp -r "${BUILT_DIR}/"* "${INSTALL_DIR}/"
+    Log "[✓] Restored from: ${BUILT_DIR}"
+    exit 0
+fi
+
+exit -1
 
 #===================================================================
 DEPOT_TOOLS_DIR="${SOURCE_DIR}/depot_tools"
@@ -185,6 +203,8 @@ if [ $? -ne 0 ]; then
     Log "Error: Failed to copy include files."
     exit 1
 fi
+
+cp -r "${INSTALL_DIR}/"* "${BUILT_DIR}/"
 
 Log "[✓] Build and install complete."
 Log "    Library:  ${INSTALL_LIB_DIR}/libv8_monolith.a"

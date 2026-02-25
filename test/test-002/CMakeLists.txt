@@ -24,3 +24,6 @@ target_link_directories(${BINARY} PUBLIC ${v8_BINARY_DIR})
 
 # Link libraries
 target_link_libraries(${BINARY} v8_monolith temporal::capi)
+
+# Strip debug symbols into a separate file
+strip_symbols_postbuild(${BINARY})

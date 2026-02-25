@@ -23,3 +23,6 @@ target_link_directories(${BINARY} PUBLIC ${v8_BINARY_DIR})
 
 # Link libraries
 target_link_libraries(${BINARY} cxxopts)
+
+# Strip debug symbols into a separate file
+strip_symbols_postbuild(${BINARY})
