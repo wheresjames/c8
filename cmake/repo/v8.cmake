@@ -53,3 +53,11 @@ if(NOT EXISTS "${v8_LIBRARIES}")
     endif()
 endif()
 
+# Expose libv8_monolith.a as an imported target so dependents can link it
+if(NOT TARGET v8)
+    add_library(v8 STATIC IMPORTED GLOBAL)
+    set_target_properties(v8 PROPERTIES
+        IMPORTED_LOCATION "${v8_LIBRARIES}"
+        INTERFACE_INCLUDE_DIRECTORIES "${v8_INCLUDE_DIRS}"
+    )
+endif()
