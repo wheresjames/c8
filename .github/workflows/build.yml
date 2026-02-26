@@ -39,13 +39,26 @@ jobs:
       - name: Install to staging
         run: cmake --install build --prefix "${{ github.workspace }}/stage"
 
-      - name: Create ZIP artifact
+      - name: Create zip artifact for c8
         run: |
           cd stage
           zip -r ../c8-linux-x86_64.zip .
 
-      - name: Upload artifact (ZIP)
+      - name: Upload artifact for c8
         uses: actions/upload-artifact@v4
         with:
           name: c8-linux-x86_64
           path: c8-linux-x86_64.zip
+
+      - name: Create zip artifact for v8
+        run: |
+          cd build/v8-install
+          zip -r ../../v8-linux-x86_64.zip .
+
+      - name: Upload artifact for v8
+        uses: actions/upload-artifact@v4
+        with:
+          name: v8-linux-x86_64
+          path: v8-linux-x86_64.zip
+
+
