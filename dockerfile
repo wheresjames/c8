@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     ninja-build \
     pkg-config \
+    cargo \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src

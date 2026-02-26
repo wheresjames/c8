@@ -27,7 +27,8 @@ jobs:
                         curl \
                         python3 \
                         ninja-build \
-                        pkg-config
+                        pkg-config \
+                        cargo
 
       - name: Configure
         run: cmake -S . -B build
