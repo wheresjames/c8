@@ -121,6 +121,20 @@ git checkout "${V8_VERSION}"
 gclient sync
 
 #===================================================================
+# Patch js-duration-format.cc to avoid std::powl (not in libstdc++)
+DURATION_FILE="${SOURCE_DIR}/v8/src/objects/js-duration-format.cc"
+if [ -f "${DURATION_FILE}" ]; then
+    if grep -q "std::powl" "${DURATION_FILE}"; then
+        Log "[+] Patching js-duration-format.cc to use std::pow..."
+        sed -i 's/std::powl/std::pow/g' "${DURATION_FILE}"
+    else
+        Log "[=] js-duration-format.cc already patched."
+    fi
+else
+    Log "[!] Warning: ${DURATION_FILE} not found; skipping patch."
+fi
+
+#===================================================================
 # Patch for V8_VERSION is < 14.8.* "avx10.2-512" error in highway
 if [[ "$(printf '%s\n' "$V8_VERSION" "14.8.0" | sort -V | head -n1)" == "$V8_VERSION" && "$V8_VERSION" != "14.8.0" ]]; then
     Log "[+] Applying patch for highway/ops/set_macros-inl.h..."
